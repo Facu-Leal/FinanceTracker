@@ -3,7 +3,7 @@ import { useAccounts } from '../hooks/useAccounts';
 import { BottomSheet } from '../../../shared/ui/BottomSheet';
 import { EmptyState } from '../../../shared/ui/EmptyState';
 import { AccountForm } from './AccountForm';
-import { formatCurrency } from '../../../shared/utils/currency';
+import { AccountListItem } from './AccountListItem';
 
 export function AccountsPage() {
   const accounts = useAccounts();
@@ -23,16 +23,7 @@ export function AccountsPage() {
       ) : (
         <div className="d-flex flex-column gap-2">
           {accounts.map((account) => (
-            <div className="card" key={account.id}>
-              <div className="card-body d-flex align-items-center gap-3">
-                <i className={`bi ${account.icon ?? 'bi-wallet2'} fs-4 text-primary`} />
-                <div className="flex-fill">
-                  <div className="fw-medium">{account.name}</div>
-                  <div className="small text-secondary text-capitalize">{account.type}</div>
-                </div>
-                <div className="fw-semibold">{formatCurrency(account.currentBalance)}</div>
-              </div>
-            </div>
+            <AccountListItem key={account.id} account={account} />
           ))}
         </div>
       )}

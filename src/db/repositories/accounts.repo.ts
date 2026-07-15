@@ -35,3 +35,18 @@ export async function updateAccount(id: string, changes: Partial<CreateAccountIn
 export async function archiveAccount(id: string): Promise<void> {
   await db.accounts.update(id, { archived: true, updatedAt: new Date().toISOString() });
 }
+
+/**
+ * Removes an account. If no transaction ever referenced it, it's hard-deleted;
+ * otherwise it's archived instead, so existing transaction history keeps a valid reference.
+ */
+export async function removeAccount(id: string): Promise<void> {
+  const referenced = await db.transactions
+    .filter((t) => t.accountId === id || t.toAccountId === id)
+    .count();
+  if (referenced === 0) {
+    await db.accounts.delete(id);
+  } else {
+    await archiveAccount(id);
+  }
+}

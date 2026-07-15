@@ -5,6 +5,8 @@ import { TransactionListItem } from '../../transactions/components/TransactionLi
 import { formatCurrency } from '../../../shared/utils/currency';
 import { currentPeriod, formatPeriodDisplay } from '../../../shared/utils/dateUtils';
 import { computeMonthSummary, computeTopCategories, computeTotalBalance } from '../logic/aggregations';
+import { computeBudgetSummaries } from '../../budgets/logic/thresholds';
+import { BudgetProgressBar } from '../../../shared/ui/BudgetProgressBar';
 import { EmptyState } from '../../../shared/ui/EmptyState';
 
 export function DashboardPage() {
@@ -17,6 +19,7 @@ export function DashboardPage() {
   const totalBalance = computeTotalBalance(accounts);
   const monthSummary = computeMonthSummary(transactions, period);
   const topCategories = computeTopCategories(transactions, categories, period, 3);
+  const budgetAlerts = computeBudgetSummaries(categories, transactions, period).filter((s) => s.status !== 'ok');
 
   return (
     <div>
@@ -54,6 +57,29 @@ export function DashboardPage() {
           Balance del mes: {formatCurrency(monthSummary.balance)}
         </span>
       </div>
+
+      {budgetAlerts.length > 0 && (
+        <div className="card mb-3">
+          <div className="card-body">
+            <div className="fw-medium mb-2">
+              <i className="bi bi-exclamation-triangle text-warning me-1" />
+              Presupuestos
+            </div>
+            {budgetAlerts.map((summary) => (
+              <div key={summary.category.id} className="mb-2">
+                <div className="d-flex align-items-center gap-2 mb-1 small">
+                  <i className={`bi ${summary.category.icon}`} style={{ color: summary.category.color }} />
+                  <span className="flex-fill">{summary.category.name}</span>
+                  <span className={summary.status === 'over' ? 'text-danger fw-medium' : 'text-warning-emphasis'}>
+                    {Math.round((summary.spent / summary.limit) * 100)}%{summary.status === 'over' ? ' ¡Supera!' : ''}
+                  </span>
+                </div>
+                <BudgetProgressBar spent={summary.spent} limit={summary.limit} status={summary.status} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {topCategories.length > 0 && (
         <div className="card mb-3">

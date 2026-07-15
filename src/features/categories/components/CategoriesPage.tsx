@@ -3,6 +3,7 @@ import { useCategories } from '../hooks/useCategories';
 import { BottomSheet } from '../../../shared/ui/BottomSheet';
 import { EmptyState } from '../../../shared/ui/EmptyState';
 import { CategoryForm } from './CategoryForm';
+import { CategoryListItem } from './CategoryListItem';
 
 export function CategoriesPage() {
   const categories = useCategories();
@@ -23,12 +24,7 @@ export function CategoriesPage() {
         <div className="row row-cols-3 g-2">
           {categories.map((category) => (
             <div className="col" key={category.id}>
-              <div className="card h-100">
-                <div className="card-body d-flex flex-column align-items-center gap-1 py-3">
-                  <i className={`bi ${category.icon} fs-4`} style={{ color: category.color }} />
-                  <span className="small text-truncate w-100 text-center">{category.name}</span>
-                </div>
-              </div>
+              <CategoryListItem category={category} />
             </div>
           ))}
         </div>
