@@ -19,6 +19,20 @@ export function periodOf(date: ISODateString): YearMonth {
   return date.slice(0, 7);
 }
 
+export function periodBounds(period: YearMonth): { from: ISODateString; to: ISODateString } {
+  const [y, m] = period.split('-').map(Number);
+  const lastDay = new Date(y ?? 1970, m ?? 1, 0).getDate();
+  return { from: `${period}-01`, to: `${period}-${String(lastDay).padStart(2, '0')}` };
+}
+
+export function yearBounds(year: number): { from: ISODateString; to: ISODateString } {
+  return { from: `${year}-01-01`, to: `${year}-12-31` };
+}
+
+export function currentYear(): number {
+  return new Date().getFullYear();
+}
+
 export function formatDateDisplay(date: ISODateString): string {
   const [y, m, d] = date.split('-').map(Number);
   return new Date(y ?? 1970, (m ?? 1) - 1, d ?? 1).toLocaleDateString('es-AR', {

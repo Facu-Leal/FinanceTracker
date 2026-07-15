@@ -7,6 +7,7 @@ import { CategoriesPage } from '../features/categories/components/CategoriesPage
 import { BudgetsPage } from '../features/budgets/components/BudgetsPage';
 import { FixedExpensesPage } from '../features/fixed-expenses/components/FixedExpensesPage';
 import { InstallmentPurchasesPage } from '../features/credit-cards/components/InstallmentPurchasesPage';
+import { StatsPage } from '../features/stats/components/StatsPage';
 import { MorePage } from '../features/more/components/MorePage';
 import { PlaceholderPage } from '../shared/ui/PlaceholderPage';
 
@@ -17,7 +18,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <DashboardPage /> },
       { path: 'movimientos', element: <TransactionsListPage /> },
-      { path: 'estadisticas', element: <PlaceholderPage title="Estadísticas" icon="bi-bar-chart" /> },
+      { path: 'estadisticas', element: <StatsPage /> },
       { path: 'mas', element: <MorePage /> },
       { path: 'mas/cuentas', element: <AccountsPage /> },
       { path: 'mas/categorias', element: <CategoriesPage /> },
