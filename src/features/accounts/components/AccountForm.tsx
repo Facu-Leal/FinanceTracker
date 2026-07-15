@@ -70,7 +70,7 @@ export function AccountForm({ account, onDone }: AccountFormProps) {
               key={option.value}
               type="button"
               className={`btn flex-fill d-flex flex-column align-items-center gap-1 py-2 ${
-                type === option.value ? 'btn-primary' : 'btn-light'
+                type === option.value ? 'btn-primary' : 'btn-outline-secondary'
               }`}
               onClick={() => setType(option.value)}
             >

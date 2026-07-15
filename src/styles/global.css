@@ -156,6 +156,23 @@ body {
   }
 }
 
+/* Amount input (transaction/budget/installment forms) */
+.amount-input-field {
+  max-width: 12rem;
+  min-width: 4rem;
+  padding: 0 0 0.25rem;
+  border: none;
+  border-bottom: 2px solid var(--bs-border-color);
+  background-color: transparent;
+  color: var(--bs-body-color);
+  transition: border-color 0.15s ease;
+}
+
+.amount-input-field:focus {
+  outline: none;
+  border-bottom-color: var(--bs-primary);
+}
+
 .empty-state {
   text-align: center;
   padding: 2.5rem 1rem;

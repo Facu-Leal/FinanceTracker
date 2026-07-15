@@ -27,7 +27,7 @@ export function SettingsPage() {
                 key={option.value}
                 type="button"
                 className={`btn flex-fill d-flex flex-column align-items-center gap-1 py-2 ${
-                  theme === option.value ? 'btn-primary' : 'btn-light'
+                  theme === option.value ? 'btn-primary' : 'btn-outline-secondary'
                 }`}
                 onClick={() => {
                   setTheme(option.value);

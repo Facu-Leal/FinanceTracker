@@ -57,7 +57,7 @@ export function CategoryForm({ onDone }: CategoryFormProps) {
             <button
               key={i}
               type="button"
-              className={`btn ${icon === i ? 'btn-primary' : 'btn-light'}`}
+              className={`btn ${icon === i ? 'btn-primary' : 'btn-outline-secondary'}`}
               onClick={() => setIcon(i)}
             >
               <i className={`bi ${i}`} style={{ color: icon === i ? undefined : color }} />

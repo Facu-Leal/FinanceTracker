@@ -112,15 +112,17 @@ export function TransactionForm({ onDone }: TransactionFormProps) {
       />
 
       <div className="mb-2">
+        <label className="form-label small text-secondary mb-1">Descripción</label>
         <input
           className="form-control"
-          placeholder="Descripción (ej. Supermercado: leche, pan, arroz)"
+          placeholder="ej. Supermercado: leche, pan, arroz"
           {...register('description', { required: true })}
         />
       </div>
 
       {type !== 'transfer' && (
         <div className="mb-2">
+          <label className="form-label small text-secondary mb-1">Categoría</label>
           <Controller
             control={control}
             name="categoryId"

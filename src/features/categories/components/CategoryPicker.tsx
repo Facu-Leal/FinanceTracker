@@ -44,7 +44,7 @@ export function CategoryPicker({ kind, value, onChange }: CategoryPickerProps) {
                 <button
                   type="button"
                   className={`btn w-100 h-100 d-flex flex-column align-items-center gap-1 py-3 ${
-                    value === category.id ? 'btn-primary' : 'btn-light'
+                    value === category.id ? 'btn-primary' : 'btn-outline-secondary'
                   }`}
                   onClick={() => {
                     onChange(category.id);

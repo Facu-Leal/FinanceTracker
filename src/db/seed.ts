@@ -5,6 +5,7 @@ import { createCategory } from './repositories/categories.repo';
 const DEFAULT_CATEGORIES: Array<{ name: string; icon: string; color: string; kind: 'income' | 'expense' | 'both' }> = [
   { name: 'Supermercado', icon: 'bi-cart', color: '#0d6efd', kind: 'expense' },
   { name: 'Transporte', icon: 'bi-bus-front', color: '#fd7e14', kind: 'expense' },
+  { name: 'Repostaje', icon: 'bi-fuel-pump', color: '#d63384', kind: 'expense' },
   { name: 'Servicios', icon: 'bi-lightning-charge', color: '#ffc107', kind: 'expense' },
   { name: 'Salud', icon: 'bi-heart-pulse', color: '#dc3545', kind: 'expense' },
   { name: 'Entretenimiento', icon: 'bi-controller', color: '#6f42c1', kind: 'expense' },
