@@ -31,10 +31,7 @@ export function IosInstallPrompt() {
   }
 
   return (
-    <div
-      className="position-fixed start-0 end-0 mx-3 p-3 card shadow-sm"
-      style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom))', zIndex: 1020 }}
-    >
+    <div className="p-3 card shadow-sm">
       <div className="d-flex align-items-start gap-2">
         <i className="bi bi-phone fs-5 text-primary" />
         <div className="flex-fill small">
