@@ -15,11 +15,21 @@ export function CalendarPage() {
   return (
     <div>
       <div className="d-flex align-items-center justify-content-between mb-3">
-        <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => setPeriod(addMonths(`${period}-01`, -1).slice(0, 7))}>
+        <button
+          type="button"
+          className="btn btn-sm btn-outline-secondary"
+          aria-label="Mes anterior"
+          onClick={() => setPeriod(addMonths(`${period}-01`, -1).slice(0, 7))}
+        >
           <i className="bi bi-chevron-left" />
         </button>
         <h1 className="h5 mb-0 text-capitalize">{formatPeriodDisplay(period)}</h1>
-        <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => setPeriod(addMonths(`${period}-01`, 1).slice(0, 7))}>
+        <button
+          type="button"
+          className="btn btn-sm btn-outline-secondary"
+          aria-label="Mes siguiente"
+          onClick={() => setPeriod(addMonths(`${period}-01`, 1).slice(0, 7))}
+        >
           <i className="bi bi-chevron-right" />
         </button>
       </div>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { BottomNav } from './BottomNav';
 import { BottomSheet } from '../shared/ui/BottomSheet';
+import { IosInstallPrompt } from '../shared/ui/IosInstallPrompt';
 import { TransactionForm } from '../features/transactions/components/TransactionForm';
 
 export function AppShell() {
@@ -16,6 +17,7 @@ export function AppShell() {
       </div>
 
       <BottomNav onAddClick={() => setAddOpen(true)} />
+      <IosInstallPrompt />
 
       <BottomSheet open={addOpen} onClose={() => setAddOpen(false)} title="Nuevo movimiento">
         <TransactionForm onDone={() => setAddOpen(false)} />

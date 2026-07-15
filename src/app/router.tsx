@@ -7,10 +7,8 @@ import { CategoriesPage } from '../features/categories/components/CategoriesPage
 import { BudgetsPage } from '../features/budgets/components/BudgetsPage';
 import { FixedExpensesPage } from '../features/fixed-expenses/components/FixedExpensesPage';
 import { InstallmentPurchasesPage } from '../features/credit-cards/components/InstallmentPurchasesPage';
-import { StatsPage } from '../features/stats/components/StatsPage';
-import { BackupsPage } from '../features/backups/components/BackupsPage';
+import { SettingsPage } from '../features/settings/components/SettingsPage';
 import { MorePage } from '../features/more/components/MorePage';
-import { PlaceholderPage } from '../shared/ui/PlaceholderPage';
 
 export const router = createBrowserRouter([
   {
@@ -19,15 +17,23 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <DashboardPage /> },
       { path: 'movimientos', element: <TransactionsListPage /> },
-      { path: 'estadisticas', element: <StatsPage /> },
+      {
+        // Recharts is a heavy dependency only this route needs — code-split it.
+        path: 'estadisticas',
+        lazy: () => import('../features/stats/components/StatsPage').then((m) => ({ Component: m.StatsPage })),
+      },
       { path: 'mas', element: <MorePage /> },
       { path: 'mas/cuentas', element: <AccountsPage /> },
       { path: 'mas/categorias', element: <CategoriesPage /> },
       { path: 'mas/presupuestos', element: <BudgetsPage /> },
       { path: 'mas/tarjetas', element: <InstallmentPurchasesPage /> },
       { path: 'mas/gastos-fijos', element: <FixedExpensesPage /> },
-      { path: 'mas/respaldos', element: <BackupsPage /> },
-      { path: 'mas/configuracion', element: <PlaceholderPage title="Configuración" icon="bi-gear" /> },
+      {
+        // Zod's validation schemas only matter here — code-split it.
+        path: 'mas/respaldos',
+        lazy: () => import('../features/backups/components/BackupsPage').then((m) => ({ Component: m.BackupsPage })),
+      },
+      { path: 'mas/configuracion', element: <SettingsPage /> },
     ],
   },
 ]);

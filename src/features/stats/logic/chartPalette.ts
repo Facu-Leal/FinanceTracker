@@ -15,8 +15,11 @@ export const INCOME_COLOR = CATEGORICAL_PALETTE[1]; // green
 export const EXPENSE_COLOR = CATEGORICAL_PALETTE[7]; // red
 export const SEQUENTIAL_HUE = CATEGORICAL_PALETTE[0]; // blue
 
-export const CHART_TEXT_MUTED = '#898781';
-export const CHART_GRIDLINE = '#e1e0d9';
+// Chrome (gridlines/axis labels) follows the current Bootstrap theme via CSS variables,
+// so it stays recessive against the surface in both light and dark mode automatically —
+// unlike the categorical/status colors above, which are data and stay fixed either way.
+export const CHART_TEXT_MUTED = 'var(--bs-secondary-color)';
+export const CHART_GRIDLINE = 'var(--bs-border-color-translucent)';
 
 export function paletteSlot(index: number): string {
   return CATEGORICAL_PALETTE[index % CATEGORICAL_PALETTE.length]!;
