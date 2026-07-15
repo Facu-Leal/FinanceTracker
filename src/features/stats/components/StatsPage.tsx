@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { QueryPage } from '../../query/components/QueryPage';
-import { EmptyState } from '../../../shared/ui/EmptyState';
+import { GraficosTab } from './GraficosTab';
 
 type Tab = 'consultas' | 'graficos';
 
@@ -28,15 +28,7 @@ export function StatsPage() {
         </button>
       </div>
 
-      {tab === 'consultas' ? (
-        <QueryPage />
-      ) : (
-        <EmptyState
-          icon="bi-bar-chart"
-          title="Próximamente"
-          description="Los gráficos se implementan en la fase siguiente del roadmap."
-        />
-      )}
+      {tab === 'consultas' ? <QueryPage /> : <GraficosTab />}
     </div>
   );
 }

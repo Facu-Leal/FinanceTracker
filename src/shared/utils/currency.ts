@@ -37,6 +37,15 @@ export function parseAmountToCents(input: string): Money {
   return pesos * 100;
 }
 
+/** Compact form for chart axis ticks, e.g. 20000000 -> "$200k", 150000000 -> "$1.5M". */
+export function formatCompactCurrency(cents: Money): string {
+  const pesos = cents / 100;
+  const abs = Math.abs(pesos);
+  if (abs >= 1_000_000) return `$${(pesos / 1_000_000).toFixed(1)}M`;
+  if (abs >= 1_000) return `$${Math.round(pesos / 1000)}k`;
+  return `$${Math.round(pesos)}`;
+}
+
 /** Formats cents back into a plain editable string (for pre-filling an amount input), e.g. 1666666 -> "16666.66", 50000 -> "500". */
 export function centsToEditableString(cents: Money): string {
   const pesos = cents / 100;
