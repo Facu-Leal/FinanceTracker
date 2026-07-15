@@ -10,6 +10,7 @@ import { computeBudgetSummaries } from '../../budgets/logic/thresholds';
 import { BudgetProgressBar } from '../../../shared/ui/BudgetProgressBar';
 import { EmptyState } from '../../../shared/ui/EmptyState';
 import { useOccurrencesForPeriod } from '../../fixed-expenses/hooks/useOccurrencesForPeriod';
+import { usePendingInstallmentsForPeriod } from '../../credit-cards/hooks/useInstallmentPurchases';
 
 export function DashboardPage() {
   const accounts = useAccounts();
@@ -23,6 +24,7 @@ export function DashboardPage() {
   const topCategories = computeTopCategories(transactions, categories, period, 3);
   const budgetAlerts = computeBudgetSummaries(categories, transactions, period).filter((s) => s.status !== 'ok');
   const dueThisPeriod = useOccurrencesForPeriod(period).filter((d) => d.occurrence.status === 'pending');
+  const dueInstallments = usePendingInstallmentsForPeriod(period);
 
   return (
     <div>
@@ -70,6 +72,22 @@ export function DashboardPage() {
               <div className="small text-secondary">
                 {dueThisPeriod.length} pendiente{dueThisPeriod.length > 1 ? 's' : ''} ·{' '}
                 {formatCurrency(dueThisPeriod.reduce((sum, d) => sum + (d.occurrence.actualAmount ?? d.fixedExpense.expectedAmount), 0))}
+              </div>
+            </div>
+            <i className="bi bi-chevron-right text-secondary" />
+          </div>
+        </Link>
+      )}
+
+      {dueInstallments.length > 0 && (
+        <Link to="/mas/tarjetas" className="card mb-3 text-decoration-none text-body">
+          <div className="card-body d-flex align-items-center gap-3">
+            <i className="bi bi-credit-card text-primary fs-4" />
+            <div className="flex-fill">
+              <div className="fw-medium">Cuotas por vencer</div>
+              <div className="small text-secondary">
+                {dueInstallments.length} pendiente{dueInstallments.length > 1 ? 's' : ''} ·{' '}
+                {formatCurrency(dueInstallments.reduce((sum, i) => sum + i.amount, 0))}
               </div>
             </div>
             <i className="bi bi-chevron-right text-secondary" />

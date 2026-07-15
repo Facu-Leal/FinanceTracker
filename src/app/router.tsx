@@ -6,6 +6,7 @@ import { AccountsPage } from '../features/accounts/components/AccountsPage';
 import { CategoriesPage } from '../features/categories/components/CategoriesPage';
 import { BudgetsPage } from '../features/budgets/components/BudgetsPage';
 import { FixedExpensesPage } from '../features/fixed-expenses/components/FixedExpensesPage';
+import { InstallmentPurchasesPage } from '../features/credit-cards/components/InstallmentPurchasesPage';
 import { MorePage } from '../features/more/components/MorePage';
 import { PlaceholderPage } from '../shared/ui/PlaceholderPage';
 
@@ -21,7 +22,7 @@ export const router = createBrowserRouter([
       { path: 'mas/cuentas', element: <AccountsPage /> },
       { path: 'mas/categorias', element: <CategoriesPage /> },
       { path: 'mas/presupuestos', element: <BudgetsPage /> },
-      { path: 'mas/tarjetas', element: <PlaceholderPage title="Tarjetas y Cuotas" icon="bi-credit-card" /> },
+      { path: 'mas/tarjetas', element: <InstallmentPurchasesPage /> },
       { path: 'mas/gastos-fijos', element: <FixedExpensesPage /> },
       { path: 'mas/respaldos', element: <PlaceholderPage title="Respaldos" icon="bi-cloud-arrow-down" /> },
       { path: 'mas/configuracion', element: <PlaceholderPage title="Configuración" icon="bi-gear" /> },
