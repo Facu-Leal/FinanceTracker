@@ -28,6 +28,7 @@ interface TransactionFormValues {
   paymentMethod: PaymentMethod;
   date: string;
   notes?: string;
+  tags?: string;
 }
 
 interface TransactionFormProps {
@@ -70,6 +71,9 @@ export function TransactionForm({ onDone }: TransactionFormProps) {
       toAccountId: type === 'transfer' ? values.toAccountId : undefined,
       paymentMethod: type === 'transfer' ? undefined : values.paymentMethod,
       notes: values.notes?.trim() || undefined,
+      tags: values.tags
+        ? values.tags.split(',').map((tag) => tag.trim()).filter(Boolean)
+        : undefined,
     });
     onDone();
   }
@@ -186,9 +190,18 @@ export function TransactionForm({ onDone }: TransactionFormProps) {
       </button>
 
       {showMore && (
-        <div className="mb-2">
-          <textarea className="form-control" placeholder="Notas" rows={2} {...register('notes')} />
-        </div>
+        <>
+          <div className="mb-2">
+            <textarea className="form-control" placeholder="Notas" rows={2} {...register('notes')} />
+          </div>
+          <div className="mb-2">
+            <input
+              className="form-control"
+              placeholder="Etiquetas separadas por coma (ej. viaje, trabajo)"
+              {...register('tags')}
+            />
+          </div>
+        </>
       )}
 
       <button type="submit" className="btn btn-primary w-100 mt-2" disabled={formState.isSubmitting || accounts.length === 0}>

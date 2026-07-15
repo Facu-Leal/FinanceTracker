@@ -4,11 +4,13 @@ import { TransactionListItem } from './TransactionListItem';
 import { EmptyState } from '../../../shared/ui/EmptyState';
 import { formatDateDisplay } from '../../../shared/utils/dateUtils';
 import { CalendarPage } from '../../calendar/components/CalendarPage';
+import { GlobalSearchModal } from '../../search/components/GlobalSearchModal';
 
 type View = 'list' | 'calendar';
 
 export function TransactionsListPage() {
   const [view, setView] = useState<View>('list');
+  const [searchOpen, setSearchOpen] = useState(false);
   const transactions = useTransactions();
 
   const groups = new Map<string, typeof transactions>();
@@ -22,23 +24,33 @@ export function TransactionsListPage() {
     <div>
       <div className="d-flex align-items-center justify-content-between mb-3">
         <h1 className="h4 mb-0">Movimientos</h1>
-        <div className="btn-group">
+        <div className="d-flex gap-2">
           <button
             type="button"
-            className={`btn btn-sm ${view === 'list' ? 'btn-primary' : 'btn-outline-secondary'}`}
-            aria-label="Ver como lista"
-            onClick={() => setView('list')}
+            className="btn btn-sm btn-outline-secondary"
+            aria-label="Buscar"
+            onClick={() => setSearchOpen(true)}
           >
-            <i className="bi bi-list-ul" />
+            <i className="bi bi-search" />
           </button>
-          <button
-            type="button"
-            className={`btn btn-sm ${view === 'calendar' ? 'btn-primary' : 'btn-outline-secondary'}`}
-            aria-label="Ver como calendario"
-            onClick={() => setView('calendar')}
-          >
-            <i className="bi bi-calendar3" />
-          </button>
+          <div className="btn-group">
+            <button
+              type="button"
+              className={`btn btn-sm ${view === 'list' ? 'btn-primary' : 'btn-outline-secondary'}`}
+              aria-label="Ver como lista"
+              onClick={() => setView('list')}
+            >
+              <i className="bi bi-list-ul" />
+            </button>
+            <button
+              type="button"
+              className={`btn btn-sm ${view === 'calendar' ? 'btn-primary' : 'btn-outline-secondary'}`}
+              aria-label="Ver como calendario"
+              onClick={() => setView('calendar')}
+            >
+              <i className="bi bi-calendar3" />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -62,6 +74,8 @@ export function TransactionsListPage() {
           </div>
         ))
       )}
+
+      <GlobalSearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   );
 }

@@ -37,6 +37,15 @@ export function TransactionListItem({ transaction }: TransactionListItemProps) {
           <div className="small text-secondary text-truncate">
             {transaction.type === 'transfer' ? `Transferencia a ${toAccount?.name ?? '—'}` : category?.name ?? 'Sin categoría'}
           </div>
+          {transaction.tags.length > 0 && (
+            <div className="d-flex gap-1 flex-wrap mt-1">
+              {transaction.tags.map((tag) => (
+                <span key={tag} className="badge text-bg-light border small fw-normal">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
         <div className={`fw-semibold ${amountClass}`}>
           {sign}
