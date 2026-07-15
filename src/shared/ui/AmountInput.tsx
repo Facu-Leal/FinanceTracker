@@ -1,11 +1,19 @@
+import { formatCurrency, parseAmountToCents } from '../utils/currency';
+
 interface AmountInputProps {
   value: string;
   onChange: (value: string) => void;
   autoFocus?: boolean;
 }
 
-/** Large, thumb-friendly numeric amount entry — whole currency units, comma as decimal separator. */
+/**
+ * Large, thumb-friendly amount entry. Accepts digits plus a single "." or "," (either can mean
+ * thousands-grouping or a decimal point — see parseAmountToCents for how that's resolved) and
+ * shows a live "= $X" preview so a misread separator is caught before saving, not after.
+ */
 export function AmountInput({ value, onChange, autoFocus }: AmountInputProps) {
+  const preview = value ? formatCurrency(parseAmountToCents(value)) : null;
+
   return (
     <div className="text-center my-3">
       <div className="input-group input-group-lg justify-content-center">
@@ -18,12 +26,10 @@ export function AmountInput({ value, onChange, autoFocus }: AmountInputProps) {
           style={{ maxWidth: '12rem' }}
           placeholder="0"
           value={value}
-          onChange={(e) => {
-            const cleaned = e.target.value.replace(/[^0-9,.]/g, '');
-            onChange(cleaned);
-          }}
+          onChange={(e) => onChange(e.target.value.replace(/[^0-9.,]/g, ''))}
         />
       </div>
+      {preview && <div className="small text-secondary">= {preview}</div>}
     </div>
   );
 }

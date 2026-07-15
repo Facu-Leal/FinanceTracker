@@ -3,7 +3,7 @@ import { createFixedExpense, updateFixedExpense } from '../../../db/repositories
 import { AmountInput } from '../../../shared/ui/AmountInput';
 import { CategoryPicker } from '../../categories/components/CategoryPicker';
 import { useAccounts } from '../../accounts/hooks/useAccounts';
-import { parseAmountToCents } from '../../../shared/utils/currency';
+import { centsToEditableString, parseAmountToCents } from '../../../shared/utils/currency';
 import { PaymentMethod } from '../../../db/types';
 import type { FixedExpense } from '../../../db/types';
 
@@ -25,7 +25,7 @@ export function FixedExpenseForm({ fixedExpense, onDone }: FixedExpenseFormProps
   const accounts = useAccounts();
   const [name, setName] = useState(fixedExpense?.name ?? '');
   const [categoryId, setCategoryId] = useState<string | undefined>(fixedExpense?.categoryId);
-  const [amount, setAmount] = useState(fixedExpense ? String(fixedExpense.expectedAmount / 100) : '');
+  const [amount, setAmount] = useState(fixedExpense ? centsToEditableString(fixedExpense.expectedAmount) : '');
   const [dayOfMonth, setDayOfMonth] = useState(fixedExpense?.dayOfMonth ?? 10);
   const [accountId, setAccountId] = useState(fixedExpense?.accountId ?? '');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(fixedExpense?.paymentMethod ?? PaymentMethod.Debit);

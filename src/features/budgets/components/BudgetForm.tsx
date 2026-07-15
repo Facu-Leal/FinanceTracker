@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { updateCategory } from '../../../db/repositories/categories.repo';
 import { useCategories } from '../../categories/hooks/useCategories';
 import { AmountInput } from '../../../shared/ui/AmountInput';
-import { parseAmountToCents, formatCurrency } from '../../../shared/utils/currency';
+import { centsToEditableString, parseAmountToCents, formatCurrency } from '../../../shared/utils/currency';
 import type { Category } from '../../../db/types';
 
 interface BudgetFormProps {
@@ -16,7 +16,9 @@ export function BudgetForm({ category, onDone }: BudgetFormProps) {
   const candidates = expenseCategories.filter((c) => c.monthlyBudget == null || c.id === category?.id);
 
   const [categoryId, setCategoryId] = useState(category?.id ?? candidates[0]?.id ?? '');
-  const [amount, setAmount] = useState(category?.monthlyBudget != null ? String(category.monthlyBudget / 100) : '');
+  const [amount, setAmount] = useState(
+    category?.monthlyBudget != null ? centsToEditableString(category.monthlyBudget) : '',
+  );
   const [submitting, setSubmitting] = useState(false);
 
   const canSubmit = categoryId && parseAmountToCents(amount || '0') > 0;

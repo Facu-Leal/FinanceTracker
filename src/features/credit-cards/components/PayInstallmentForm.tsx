@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { AmountInput } from '../../../shared/ui/AmountInput';
 import { markInstallmentPaid } from '../../../db/repositories/installments.repo';
-import { parseAmountToCents } from '../../../shared/utils/currency';
+import { centsToEditableString, parseAmountToCents } from '../../../shared/utils/currency';
 import type { Installment } from '../../../db/types';
 
 interface PayInstallmentFormProps {
@@ -11,7 +11,7 @@ interface PayInstallmentFormProps {
 }
 
 export function PayInstallmentForm({ installment, installmentsCount, onDone }: PayInstallmentFormProps) {
-  const [amount, setAmount] = useState(String(installment.amount / 100));
+  const [amount, setAmount] = useState(centsToEditableString(installment.amount));
   const [submitting, setSubmitting] = useState(false);
 
   const canSubmit = parseAmountToCents(amount || '0') > 0;

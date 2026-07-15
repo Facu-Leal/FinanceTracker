@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createAccount, updateAccount, adjustAccountBalance } from '../../../db/repositories/accounts.repo';
-import { parseAmountToCents } from '../../../shared/utils/currency';
+import { centsToEditableString, parseAmountToCents } from '../../../shared/utils/currency';
 import type { Account } from '../../../db/types';
 
 const TYPE_OPTIONS: Array<{ value: 'cash' | 'bank' | 'wallet'; label: string; icon: string }> = [
@@ -18,7 +18,7 @@ interface AccountFormProps {
 export function AccountForm({ account, onDone }: AccountFormProps) {
   const [name, setName] = useState(account?.name ?? '');
   const [type, setType] = useState<'cash' | 'bank' | 'wallet'>(account?.type ?? 'bank');
-  const [balance, setBalance] = useState(account ? String(account.currentBalance / 100) : '');
+  const [balance, setBalance] = useState(account ? centsToEditableString(account.currentBalance) : '');
   const [submitting, setSubmitting] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {

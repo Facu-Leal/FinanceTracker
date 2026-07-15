@@ -3,7 +3,7 @@ import { createInstallmentPurchase } from '../../../db/repositories/installments
 import { AmountInput } from '../../../shared/ui/AmountInput';
 import { CategoryPicker } from '../../categories/components/CategoryPicker';
 import { useAccounts } from '../../accounts/hooks/useAccounts';
-import { parseAmountToCents } from '../../../shared/utils/currency';
+import { formatCurrency, parseAmountToCents } from '../../../shared/utils/currency';
 import { todayISO } from '../../../shared/utils/dateUtils';
 
 interface NewPurchaseFormProps {
@@ -88,11 +88,7 @@ export function NewPurchaseForm({ onDone }: NewPurchaseFormProps) {
       {amount && parseAmountToCents(amount) > 0 && installmentsCount >= 2 && (
         <p className="small text-secondary text-center">
           {installmentsCount} cuotas de aproximadamente{' '}
-          {(parseAmountToCents(amount) / installmentsCount / 100).toLocaleString('es-AR', {
-            style: 'currency',
-            currency: 'ARS',
-            minimumFractionDigits: 0,
-          })}
+          {formatCurrency(Math.round(parseAmountToCents(amount) / installmentsCount))}
         </p>
       )}
 
