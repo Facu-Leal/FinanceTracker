@@ -66,3 +66,18 @@ export function addMonths(date: ISODateString, months: number): ISODateString {
   const day = Math.min(d ?? 1, lastDay);
   return toISODate(new Date(y ?? 1970, targetMonthIndex, day));
 }
+
+/** 42 dates (6 full weeks, Monday-first) covering a month's calendar grid, including the leading/trailing days from adjacent months. */
+export function getMonthGridDates(period: YearMonth): ISODateString[] {
+  const [y, m] = period.split('-').map(Number);
+  const firstOfMonth = new Date(y ?? 1970, (m ?? 1) - 1, 1);
+  const firstWeekday = (firstOfMonth.getDay() + 6) % 7; // Monday = 0
+  const start = new Date(firstOfMonth);
+  start.setDate(start.getDate() - firstWeekday);
+
+  return Array.from({ length: 42 }, (_, i) => {
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
+    return toISODate(d);
+  });
+}

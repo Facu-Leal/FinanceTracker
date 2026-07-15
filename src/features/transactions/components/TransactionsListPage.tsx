@@ -1,9 +1,14 @@
+import { useState } from 'react';
 import { useTransactions } from '../hooks/useTransactions';
 import { TransactionListItem } from './TransactionListItem';
 import { EmptyState } from '../../../shared/ui/EmptyState';
 import { formatDateDisplay } from '../../../shared/utils/dateUtils';
+import { CalendarPage } from '../../calendar/components/CalendarPage';
+
+type View = 'list' | 'calendar';
 
 export function TransactionsListPage() {
+  const [view, setView] = useState<View>('list');
   const transactions = useTransactions();
 
   const groups = new Map<string, typeof transactions>();
@@ -15,9 +20,31 @@ export function TransactionsListPage() {
 
   return (
     <div>
-      <h1 className="h4 mb-3">Movimientos</h1>
+      <div className="d-flex align-items-center justify-content-between mb-3">
+        <h1 className="h4 mb-0">Movimientos</h1>
+        <div className="btn-group">
+          <button
+            type="button"
+            className={`btn btn-sm ${view === 'list' ? 'btn-primary' : 'btn-outline-secondary'}`}
+            aria-label="Ver como lista"
+            onClick={() => setView('list')}
+          >
+            <i className="bi bi-list-ul" />
+          </button>
+          <button
+            type="button"
+            className={`btn btn-sm ${view === 'calendar' ? 'btn-primary' : 'btn-outline-secondary'}`}
+            aria-label="Ver como calendario"
+            onClick={() => setView('calendar')}
+          >
+            <i className="bi bi-calendar3" />
+          </button>
+        </div>
+      </div>
 
-      {transactions.length === 0 ? (
+      {view === 'calendar' ? (
+        <CalendarPage />
+      ) : transactions.length === 0 ? (
         <EmptyState
           icon="bi-receipt"
           title="Todavía no hay movimientos"
