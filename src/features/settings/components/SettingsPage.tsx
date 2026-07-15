@@ -40,7 +40,8 @@ export function SettingsPage() {
 
       <div className="card">
         <div className="card-body small text-secondary">
-          Finance Tracker — versión 0.1.0. Toda tu información se guarda únicamente en este dispositivo.
+          <div className="mb-1">Finance Tracker — versión 0.1.0. Toda tu información se guarda únicamente en este dispositivo.</div>
+          <div>© {new Date().getFullYear()} Pikka. Todos los derechos reservados.</div>
         </div>
       </div>
     </div>

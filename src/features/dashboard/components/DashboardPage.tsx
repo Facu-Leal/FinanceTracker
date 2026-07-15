@@ -28,7 +28,7 @@ export function DashboardPage() {
 
   return (
     <div>
-      <h1 className="h4 mb-3">Hola 👋</h1>
+      <h1 className="h4 mb-3">Finance Tracker</h1>
 
       <div className="card mb-3">
         <div className="card-body">
