@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useAccounts } from '../../accounts/hooks/useAccounts';
 import { useCategories } from '../../categories/hooks/useCategories';
 import { useRecentTransactions, useTransactions } from '../../transactions/hooks/useTransactions';
@@ -9,8 +10,6 @@ import { computeBudgetSummaries } from '../../budgets/logic/thresholds';
 import { BudgetProgressBar } from '../../../shared/ui/BudgetProgressBar';
 import { EmptyState } from '../../../shared/ui/EmptyState';
 import { useOccurrencesForPeriod } from '../../fixed-expenses/hooks/useOccurrencesForPeriod';
-import { markOccurrencePaid } from '../../../db/repositories/fixedExpenses.repo';
-import { formatDateDisplay } from '../../../shared/utils/dateUtils';
 
 export function DashboardPage() {
   const accounts = useAccounts();
@@ -63,26 +62,19 @@ export function DashboardPage() {
       </div>
 
       {dueThisPeriod.length > 0 && (
-        <div className="card mb-3">
-          <div className="card-body">
-            <div className="fw-medium mb-2">
-              <i className="bi bi-calendar-check text-primary me-1" />
-              Próximos vencimientos
-            </div>
-            {dueThisPeriod.map(({ occurrence, fixedExpense }) => (
-              <div key={occurrence.id} className="d-flex align-items-center gap-2 py-1">
-                <span className="flex-fill">
-                  {fixedExpense.name}{' '}
-                  <span className="small text-secondary">vence {formatDateDisplay(occurrence.dueDate)}</span>
-                </span>
-                <span className="fw-medium">{formatCurrency(occurrence.actualAmount ?? fixedExpense.expectedAmount)}</span>
-                <button type="button" className="btn btn-sm btn-primary" onClick={() => markOccurrencePaid(occurrence.id)}>
-                  Pagar
-                </button>
+        <Link to="/mas/gastos-fijos" className="card mb-3 text-decoration-none text-body">
+          <div className="card-body d-flex align-items-center gap-3">
+            <i className="bi bi-calendar-check text-primary fs-4" />
+            <div className="flex-fill">
+              <div className="fw-medium">Próximos vencimientos</div>
+              <div className="small text-secondary">
+                {dueThisPeriod.length} pendiente{dueThisPeriod.length > 1 ? 's' : ''} ·{' '}
+                {formatCurrency(dueThisPeriod.reduce((sum, d) => sum + (d.occurrence.actualAmount ?? d.fixedExpense.expectedAmount), 0))}
               </div>
-            ))}
+            </div>
+            <i className="bi bi-chevron-right text-secondary" />
           </div>
-        </div>
+        </Link>
       )}
 
       {budgetAlerts.length > 0 && (

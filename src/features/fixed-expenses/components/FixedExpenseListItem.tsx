@@ -5,7 +5,8 @@ import { formatCurrency } from '../../../shared/utils/currency';
 import { formatDateDisplay } from '../../../shared/utils/dateUtils';
 import { BottomSheet } from '../../../shared/ui/BottomSheet';
 import { FixedExpenseForm } from './FixedExpenseForm';
-import { markOccurrencePaid, markOccurrenceUnpaid, removeFixedExpense } from '../../../db/repositories/fixedExpenses.repo';
+import { PayOccurrenceForm } from './PayOccurrenceForm';
+import { markOccurrenceUnpaid, removeFixedExpense } from '../../../db/repositories/fixedExpenses.repo';
 
 interface FixedExpenseListItemProps {
   due: FixedExpenseDue;
@@ -16,6 +17,7 @@ export function FixedExpenseListItem({ due }: FixedExpenseListItemProps) {
   const categories = useCategories();
   const category = categories.find((c) => c.id === fixedExpense.categoryId);
   const [editOpen, setEditOpen] = useState(false);
+  const [payOpen, setPayOpen] = useState(false);
 
   const amount = occurrence.actualAmount ?? fixedExpense.expectedAmount;
   const isPaid = occurrence.status === 'paid';
@@ -46,12 +48,16 @@ export function FixedExpenseListItem({ due }: FixedExpenseListItemProps) {
               <i className="bi bi-check-lg" />
             </button>
           ) : (
-            <button type="button" className="btn btn-sm btn-primary" onClick={() => markOccurrencePaid(occurrence.id)}>
+            <button type="button" className="btn btn-sm btn-primary" onClick={() => setPayOpen(true)}>
               Pagar
             </button>
           )}
         </div>
       </div>
+
+      <BottomSheet open={payOpen} onClose={() => setPayOpen(false)} title="Confirmar pago">
+        <PayOccurrenceForm occurrence={occurrence} fixedExpense={fixedExpense} onDone={() => setPayOpen(false)} />
+      </BottomSheet>
 
       <BottomSheet open={editOpen} onClose={() => setEditOpen(false)} title="Editar gasto fijo">
         <FixedExpenseForm fixedExpense={fixedExpense} onDone={() => setEditOpen(false)} />
