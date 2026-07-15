@@ -8,6 +8,9 @@ import { computeMonthSummary, computeTopCategories, computeTotalBalance } from '
 import { computeBudgetSummaries } from '../../budgets/logic/thresholds';
 import { BudgetProgressBar } from '../../../shared/ui/BudgetProgressBar';
 import { EmptyState } from '../../../shared/ui/EmptyState';
+import { useOccurrencesForPeriod } from '../../fixed-expenses/hooks/useOccurrencesForPeriod';
+import { markOccurrencePaid } from '../../../db/repositories/fixedExpenses.repo';
+import { formatDateDisplay } from '../../../shared/utils/dateUtils';
 
 export function DashboardPage() {
   const accounts = useAccounts();
@@ -20,6 +23,7 @@ export function DashboardPage() {
   const monthSummary = computeMonthSummary(transactions, period);
   const topCategories = computeTopCategories(transactions, categories, period, 3);
   const budgetAlerts = computeBudgetSummaries(categories, transactions, period).filter((s) => s.status !== 'ok');
+  const dueThisPeriod = useOccurrencesForPeriod(period).filter((d) => d.occurrence.status === 'pending');
 
   return (
     <div>
@@ -57,6 +61,29 @@ export function DashboardPage() {
           Balance del mes: {formatCurrency(monthSummary.balance)}
         </span>
       </div>
+
+      {dueThisPeriod.length > 0 && (
+        <div className="card mb-3">
+          <div className="card-body">
+            <div className="fw-medium mb-2">
+              <i className="bi bi-calendar-check text-primary me-1" />
+              Próximos vencimientos
+            </div>
+            {dueThisPeriod.map(({ occurrence, fixedExpense }) => (
+              <div key={occurrence.id} className="d-flex align-items-center gap-2 py-1">
+                <span className="flex-fill">
+                  {fixedExpense.name}{' '}
+                  <span className="small text-secondary">vence {formatDateDisplay(occurrence.dueDate)}</span>
+                </span>
+                <span className="fw-medium">{formatCurrency(occurrence.actualAmount ?? fixedExpense.expectedAmount)}</span>
+                <button type="button" className="btn btn-sm btn-primary" onClick={() => markOccurrencePaid(occurrence.id)}>
+                  Pagar
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {budgetAlerts.length > 0 && (
         <div className="card mb-3">

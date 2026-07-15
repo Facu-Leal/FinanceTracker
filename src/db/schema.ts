@@ -35,6 +35,13 @@ export class FinanceTrackerDB extends Dexie {
       installments: 'id, purchaseId, period, status',
       budgets: 'id, [categoryId+period]',
     });
+
+    // Unique compound index so ensureOccurrenceExists() can rely on IndexedDB itself to
+    // reject a second occurrence for the same (fixedExpense, period) under a race, instead
+    // of only trusting a check-then-insert — the same class of bug the category seed had.
+    this.version(2).stores({
+      fixedExpenseOccurrences: 'id, fixedExpenseId, period, status, &[fixedExpenseId+period]',
+    });
   }
 }
 
