@@ -37,6 +37,25 @@ export async function archiveAccount(id: string): Promise<void> {
 }
 
 /**
+ * Directly corrects an account's balance (e.g. to reconcile with the real bank balance)
+ * without creating a fake income/expense transaction. Shifts initialBalance by the same
+ * delta so existing transaction history — and the monthly income/expense totals derived
+ * from it — stays untouched.
+ */
+export async function adjustAccountBalance(id: string, newBalance: number): Promise<void> {
+  await db.transaction('rw', db.accounts, async () => {
+    const account = await db.accounts.get(id);
+    if (!account) return;
+    const delta = newBalance - account.currentBalance;
+    await db.accounts.update(id, {
+      initialBalance: account.initialBalance + delta,
+      currentBalance: newBalance,
+      updatedAt: new Date().toISOString(),
+    });
+  });
+}
+
+/**
  * Removes an account. If no transaction ever referenced it, it's hard-deleted;
  * otherwise it's archived instead, so existing transaction history keeps a valid reference.
  */
