@@ -4,6 +4,8 @@ import { useCategories } from '../../categories/hooks/useCategories';
 import { useAccounts } from '../../accounts/hooks/useAccounts';
 import { formatCurrency } from '../../../shared/utils/currency';
 import { ConfirmDialog } from '../../../shared/ui/ConfirmDialog';
+import { MaskedAmount } from '../../../shared/ui/MaskedAmount';
+import { usePrivacyMode } from '../../../shared/privacyMode';
 import { deleteTransaction } from '../../../db/repositories/transactions.repo';
 
 interface TransactionListItemProps {
@@ -14,6 +16,7 @@ export function TransactionListItem({ transaction }: TransactionListItemProps) {
   const categories = useCategories();
   const accounts = useAccounts(true);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const { hidden } = usePrivacyMode();
 
   const category = categories.find((c) => c.id === transaction.categoryId);
   const toAccount = transaction.toAccountId ? accounts.find((a) => a.id === transaction.toAccountId) : undefined;
@@ -48,8 +51,8 @@ export function TransactionListItem({ transaction }: TransactionListItemProps) {
           )}
         </div>
         <div className={`fw-semibold ${amountClass}`}>
-          {sign}
-          {formatCurrency(transaction.amount)}
+          {!hidden && sign}
+          <MaskedAmount value={transaction.amount} />
         </div>
       </button>
 

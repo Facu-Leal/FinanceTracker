@@ -3,7 +3,8 @@ import { useAccounts } from '../../accounts/hooks/useAccounts';
 import { useCategories } from '../../categories/hooks/useCategories';
 import { useRecentTransactions, useTransactions } from '../../transactions/hooks/useTransactions';
 import { TransactionListItem } from '../../transactions/components/TransactionListItem';
-import { formatCurrency } from '../../../shared/utils/currency';
+import { MaskedAmount } from '../../../shared/ui/MaskedAmount';
+import { usePrivacyMode } from '../../../shared/privacyMode';
 import { currentPeriod, formatPeriodDisplay } from '../../../shared/utils/dateUtils';
 import { computeMonthSummary, computeTopCategories, computeTotalBalance } from '../logic/aggregations';
 import { computeBudgetSummaries } from '../../budgets/logic/thresholds';
@@ -17,6 +18,7 @@ export function DashboardPage() {
   const categories = useCategories();
   const transactions = useTransactions();
   const recent = useRecentTransactions(5);
+  const { hidden, toggle } = usePrivacyMode();
 
   const period = currentPeriod();
   const totalBalance = computeTotalBalance(accounts);
@@ -32,8 +34,20 @@ export function DashboardPage() {
 
       <div className="card mb-3">
         <div className="card-body">
-          <div className="small text-secondary">Saldo disponible</div>
-          <div className="display-6 fw-semibold">{formatCurrency(totalBalance)}</div>
+          <div className="d-flex align-items-center justify-content-between">
+            <div className="small text-secondary">Saldo disponible</div>
+            <button
+              type="button"
+              className="btn btn-sm btn-link text-secondary p-0"
+              aria-label={hidden ? 'Mostrar saldo' : 'Ocultar saldo'}
+              onClick={toggle}
+            >
+              <i className={`bi ${hidden ? 'bi-eye-slash' : 'bi-eye'}`} />
+            </button>
+          </div>
+          <div className="display-6 fw-semibold">
+            <MaskedAmount value={totalBalance} />
+          </div>
         </div>
       </div>
 
@@ -42,7 +56,9 @@ export function DashboardPage() {
           <div className="card h-100">
             <div className="card-body">
               <div className="small text-secondary">Ingresos</div>
-              <div className="fs-5 fw-semibold text-success">{formatCurrency(monthSummary.income)}</div>
+              <div className="fs-5 fw-semibold text-success">
+                <MaskedAmount value={monthSummary.income} />
+              </div>
             </div>
           </div>
         </div>
@@ -50,7 +66,9 @@ export function DashboardPage() {
           <div className="card h-100">
             <div className="card-body">
               <div className="small text-secondary">Gastos</div>
-              <div className="fs-5 fw-semibold text-danger">{formatCurrency(monthSummary.expense)}</div>
+              <div className="fs-5 fw-semibold text-danger">
+                <MaskedAmount value={monthSummary.expense} />
+              </div>
             </div>
           </div>
         </div>
@@ -59,7 +77,7 @@ export function DashboardPage() {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <span className="small text-secondary text-capitalize">{formatPeriodDisplay(period)}</span>
         <span className={`small fw-medium ${monthSummary.balance >= 0 ? 'text-success' : 'text-danger'}`}>
-          Balance del mes: {formatCurrency(monthSummary.balance)}
+          Balance del mes: <MaskedAmount value={monthSummary.balance} />
         </span>
       </div>
 
@@ -71,7 +89,9 @@ export function DashboardPage() {
               <div className="fw-medium">Próximos vencimientos</div>
               <div className="small text-secondary">
                 {dueThisPeriod.length} pendiente{dueThisPeriod.length > 1 ? 's' : ''} ·{' '}
-                {formatCurrency(dueThisPeriod.reduce((sum, d) => sum + (d.occurrence.actualAmount ?? d.fixedExpense.expectedAmount), 0))}
+                <MaskedAmount
+                  value={dueThisPeriod.reduce((sum, d) => sum + (d.occurrence.actualAmount ?? d.fixedExpense.expectedAmount), 0)}
+                />
               </div>
             </div>
             <i className="bi bi-chevron-right text-secondary" />
@@ -87,7 +107,7 @@ export function DashboardPage() {
               <div className="fw-medium">Cuotas por vencer</div>
               <div className="small text-secondary">
                 {dueInstallments.length} pendiente{dueInstallments.length > 1 ? 's' : ''} ·{' '}
-                {formatCurrency(dueInstallments.reduce((sum, i) => sum + i.amount, 0))}
+                <MaskedAmount value={dueInstallments.reduce((sum, i) => sum + i.amount, 0)} />
               </div>
             </div>
             <i className="bi bi-chevron-right text-secondary" />
@@ -126,7 +146,9 @@ export function DashboardPage() {
               <div key={category.id} className="d-flex align-items-center gap-2 py-1">
                 <i className={`bi ${category.icon}`} style={{ color: category.color }} />
                 <span className="flex-fill">{category.name}</span>
-                <span className="fw-medium">{formatCurrency(total)}</span>
+                <span className="fw-medium">
+                  <MaskedAmount value={total} />
+                </span>
               </div>
             ))}
           </div>
