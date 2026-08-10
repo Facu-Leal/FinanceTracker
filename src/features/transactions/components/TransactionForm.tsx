@@ -4,6 +4,7 @@ import { createTransaction } from '../../../db/repositories/transactions.repo';
 import { AmountInput } from '../../../shared/ui/AmountInput';
 import { CategoryPicker } from '../../categories/components/CategoryPicker';
 import { useAccounts } from '../../accounts/hooks/useAccounts';
+import { getStoredDefaultAccountId } from '../../../shared/defaultAccount';
 import { parseAmountToCents } from '../../../shared/utils/currency';
 import { todayISO } from '../../../shared/utils/dateUtils';
 import { PaymentMethod } from '../../../db/types';
@@ -52,11 +53,14 @@ export function TransactionForm({ onDone }: TransactionFormProps) {
 
   const accountId = watch('accountId');
 
-  // Accounts load asynchronously (useLiveQuery); default to the first one once available
-  // so a single-account user never has to touch the picker to register a transaction.
+  // Accounts load asynchronously (useLiveQuery); default to the saved default account
+  // (or the first one) once available, so a single-account user never has to touch
+  // the picker to register a transaction.
   useEffect(() => {
     if (!accountId && accounts.length > 0) {
-      setValue('accountId', accounts[0]!.id);
+      const defaultId = getStoredDefaultAccountId();
+      const preferred = accounts.find((a) => a.id === defaultId);
+      setValue('accountId', (preferred ?? accounts[0]!).id);
     }
   }, [accounts, accountId, setValue]);
 
